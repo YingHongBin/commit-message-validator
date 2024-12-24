@@ -1,5 +1,8 @@
 name: "Commit Message Validator"
 description: "A GitHub Action to validate commit messages follow the guidelines."
+branding:
+  icon: "code"
+  color: "blue"
 
 runs:
   using: "node20"
