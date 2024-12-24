@@ -1,0 +1,32 @@
+{
+  "name": "commit-message-validator",
+  "version": "1.0.0",
+  "description": "Action to validate commits follow the guidelines",
+  "main": "lib/main.js",
+  "scripts": {
+    "build": "tsc && ncc build -m",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/YingHongBin/commit-message-validator.git"
+  },
+  "keywords": [],
+  "author": "hongbin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/YingHongBin/commit-message-validator/issues"
+  },
+  "homepage": "https://github.com/YingHongBin/commit-message-validator#readme",
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@vercel/ncc": "^0.38.3",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "@actions/core": "^1.11.1",
+    "@actions/github": "^6.0.0",
+    "@octokit/webhooks-types": "^7.6.1"
+  }
+}
