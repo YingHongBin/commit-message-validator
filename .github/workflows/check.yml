@@ -1,0 +1,15 @@
+name: check code style
+
+on: [push, pull_request]
+
+jobs:
+    check:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+              
+            - name: Check commit message
+              uses: ./
+              env:
+                ACTIONS_STEP_DEBUG: ${{ vars.ACTIONS_STEP_DEBUG}}
