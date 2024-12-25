@@ -2,7 +2,7 @@
   "name": "commit-message-validator",
   "version": "1.0.0",
   "description": "Action to validate commits follow the guidelines",
-  "main": "lib/main.js",
+  "main": "lib/src/main.js",
   "scripts": {
     "build": "tsc && ncc build -m",
     "test": "jest"
