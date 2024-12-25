@@ -11,6 +11,16 @@ describe('parseMessage', () => {
     expect(result.hasFooter).toBe(false);
   });
 
+  test('single line message parse with fix type', () => {
+    const message = 'fix: bug fix';
+    const result: CommitMessage = parseMessage(message);
+    expect(result.header).toBe('fix: bug fix');
+    expect(result.body).toStrictEqual([]);
+    expect(result.hasBody).toBe(false);
+    expect(result.footer).toBe(null);
+    expect(result.hasFooter).toBe(false);
+  });
+
   test('multi line message parse without footer', () => {
     const message = 'feat: add new feature\n\nthis is a new feature';
     const result: CommitMessage = parseMessage(message);

@@ -24,8 +24,9 @@ function parseMessage(message: string): CommitMessage {
   const sections: string[] = message.split('\n\n');
   const footerCandidate = sections[sections.length - 1];
   if (
-    footerCandidate.startsWith('close') ||
-    footerCandidate.startsWith('fix')
+    (footerCandidate.startsWith('close') ||
+      footerCandidate.startsWith('fix')) &&
+    sections.length > 1
   ) {
     return new CommitMessage(
       sections[0],
