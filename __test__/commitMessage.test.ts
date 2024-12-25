@@ -32,7 +32,8 @@ describe('parseMessage', () => {
   });
 
   test('multi line message parse with footer', () => {
-    const message = 'feat: add new feature\n\nthis is a new feature\n\nclose #123';
+    const message =
+      'feat: add new feature\n\nthis is a new feature\n\nclose #123';
     const result: CommitMessage = parseMessage(message);
     expect(result.header).toBe('feat: add new feature');
     expect(result.body).toEqual(['this is a new feature']);
@@ -42,7 +43,8 @@ describe('parseMessage', () => {
   });
 
   test('multi line message parse with fix footer', () => {
-    const message = 'feat: add new feature\n\nthis is a new feature\n\nfix #123';
+    const message =
+      'feat: add new feature\n\nthis is a new feature\n\nfix #123';
     const result: CommitMessage = parseMessage(message);
     expect(result.header).toBe('feat: add new feature');
     expect(result.body).toEqual(['this is a new feature']);
@@ -52,7 +54,8 @@ describe('parseMessage', () => {
   });
 
   test('multi line message parse with multiple paragraphs', () => {
-    const message = 'feat: add new feature\n\nparagraph one\n\nparagraph two\n\nclose #123';
+    const message =
+      'feat: add new feature\n\nparagraph one\n\nparagraph two\n\nclose #123';
     const result: CommitMessage = parseMessage(message);
     expect(result.header).toBe('feat: add new feature');
     expect(result.body).toEqual(['paragraph one', 'paragraph two']);
@@ -72,7 +75,8 @@ describe('parseMessage', () => {
   });
 
   test('multi line message parse with merge commit', () => {
-    const message = 'Merge pull request #123 from user/branch\n\nfeat: add new feature\n\nclose #123';
+    const message =
+      'Merge pull request #123 from user/branch\n\nfeat: add new feature\n\nclose #123';
     const result: CommitMessage = parseMessage(message);
     expect(result.header).toBe('Merge pull request #123 from user/branch');
     expect(result.body).toStrictEqual([]);
