@@ -70,4 +70,14 @@ describe('parseMessage', () => {
     expect(result.footer).toBe('close #123');
     expect(result.hasFooter).toBe(true);
   });
+
+  test('multi line message parse with merge commit', () => {
+    const message = 'Merge pull request #123 from user/branch\n\nfeat: add new feature\n\nclose #123';
+    const result: CommitMessage = parseMessage(message);
+    expect(result.header).toBe('Merge pull request #123 from user/branch');
+    expect(result.body).toStrictEqual([]);
+    expect(result.hasBody).toBe(false);
+    expect(result.footer).toBe(null);
+    expect(result.hasFooter).toBe(false);
+  });
 });

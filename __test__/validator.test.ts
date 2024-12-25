@@ -41,10 +41,10 @@ describe('validate', () => {
   it('should validate a correct merge pull request commit message', () => {
     const commitMessage: CommitMessage = {
       header: 'Merge pull request #123 from user/branch',
-      body: ['This is a valid body paragraph.'],
-      footer: 'close #123',
-      hasBody: true,
-      hasFooter: true,
+      body: [],
+      footer: null,
+      hasBody: false,
+      hasFooter: false,
     };
 
     validate(commitMessage);
