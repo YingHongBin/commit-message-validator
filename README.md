@@ -44,3 +44,6 @@ Footer is optional. If the last paragraph start with `close` or `fix`, it is con
 - Only use `close` or `fix` as keywords
 - Format like `close #{issue_number}` or `fix #{issue_number}`
 - Close multi issue in one line like `close #{issue_number}, close #{issue_number}`, no additional space in the line.
+
+### Pull Request Merge Commit
+If the commit is a merge commit from merge pull request in github, the commit message header line must be `Merge pull request #{pull_request_number} from {branch_name}`, which is default format from github.
