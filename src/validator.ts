@@ -101,17 +101,17 @@ function validateBody(body: string[]): void {
       core.setFailed(
         `Body paragraph should start with an uppercase letter: ${paragraph}`,
       );
-      paragraph.split('\n').forEach(line => {
-        if (line.startsWith('') || line.endsWith('')) {
-          core.setFailed(
-            `Body line should not start or end with a space: ${line}`,
-          );
-        }
-        if (line.trim().length > 100) {
-          core.setFailed(`Body line is too long: ${line}`);
-        }
-      });
     }
+    paragraph.split('\n').forEach(line => {
+      if (line.startsWith(' ') || line.endsWith(' ')) {
+        core.setFailed(
+          `Body line should not start or end with a space: ${line}`,
+        );
+      }
+      if (line.trim().length > 100) {
+        core.setFailed(`Body line is too long: ${line}`);
+      }
+    });
   });
 }
 
