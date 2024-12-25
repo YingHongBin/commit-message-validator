@@ -38,6 +38,20 @@ describe('validate', () => {
     expect(core.setFailed).not.toHaveBeenCalled();
   });
 
+  it('should validate a correct merge pull request commit message', () => {
+    const commitMessage: CommitMessage = {
+      header: 'Merge pull request #123 from user/branch',
+      body: ['This is a valid body paragraph.'],
+      footer: 'close #123',
+      hasBody: true,
+      hasFooter: true,
+    };
+
+    validate(commitMessage);
+
+    expect(core.setFailed).not.toHaveBeenCalled();
+  });
+
   it('should fail for invalid header', () => {
     const commitMessage: CommitMessage = {
       header: 'invalid header',

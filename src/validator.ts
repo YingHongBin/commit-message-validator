@@ -77,6 +77,10 @@ function validateSubject(subject: string): void {
  */
 function validateHeader(header: string): void {
   const headerPattern = /^(.+?)(?:\((.+)\))?: (.+)$/;
+  const mergePattern = /^Merge pull request #[0-9]+ from .+$/;
+  if (mergePattern.test(header)) {
+    return;
+  }
   const match = header.match(headerPattern);
   if (!match) {
     core.setFailed(`Invalid header: ${header}`);
