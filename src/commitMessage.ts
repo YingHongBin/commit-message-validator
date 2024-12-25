@@ -1,4 +1,4 @@
-import {FOOTER_PATTERN, MERGE_PATTERN} from './constants';
+import {FOOTER_PATTERN, MERGE_PATTERN, REVERT_PATTERN} from './constants';
 
 class CommitMessage {
   header: string;
@@ -24,7 +24,7 @@ function parseMessage(message: string): CommitMessage {
   const sections: string[] = message.split('\n\n');
   console.log(sections[0]);
   const footerCandidate = sections[sections.length - 1];
-  if (MERGE_PATTERN.test(sections[0])) {
+  if (MERGE_PATTERN.test(sections[0]) || REVERT_PATTERN.test(sections[0])) {
     return new CommitMessage(sections[0], [], null);
   } else if (FOOTER_PATTERN.test(footerCandidate) && sections.length > 1) {
     return new CommitMessage(
