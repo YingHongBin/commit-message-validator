@@ -1,4 +1,4 @@
-import * as core from '@actions/core';
+import {FOOTER_PATTERN, MERGE_PATTERN} from './constants';
 
 class CommitMessage {
   header: string;
@@ -22,12 +22,11 @@ class CommitMessage {
 
 function parseMessage(message: string): CommitMessage {
   const sections: string[] = message.split('\n\n');
+  console.log(sections[0]);
   const footerCandidate = sections[sections.length - 1];
-  if (
-    (footerCandidate.startsWith('close') ||
-      footerCandidate.startsWith('fix')) &&
-    sections.length > 1
-  ) {
+  if (MERGE_PATTERN.test(sections[0])) {
+    return new CommitMessage(sections[0], [], null);
+  } else if (FOOTER_PATTERN.test(footerCandidate) && sections.length > 1) {
     return new CommitMessage(
       sections[0],
       sections.slice(1, sections.length - 1),
