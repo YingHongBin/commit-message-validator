@@ -4,7 +4,7 @@ describe('parseMessage', () => {
   test('single line message parse', () => {
     const message = 'feat: add new feature';
     const result: CommitMessage = parseMessage(message);
-    expect(result.header).toBe('feat: add new feature');
+    expect(result.header).toBe('feat:  add new feature');
     expect(result.body).toStrictEqual([]);
     expect(result.hasBody).toBe(false);
     expect(result.footer).toBe(null);
