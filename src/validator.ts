@@ -5,6 +5,7 @@ import {
   SCOPE_PATTERN,
   MERGE_PATTERN,
   FOOTER_PATTERN,
+  REVERT_PATTERN,
 } from './constants';
 import * as core from '@actions/core';
 
@@ -72,7 +73,7 @@ function validateSubject(subject: string): void {
  * @param header given header to validate
  */
 function validateHeader(header: string): void {
-  if (MERGE_PATTERN.test(header)) {
+  if (MERGE_PATTERN.test(header) || REVERT_PATTERN.test(header)) {
     return;
   }
   const match = header.match(HEADER_PATTERN);

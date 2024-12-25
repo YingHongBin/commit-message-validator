@@ -52,6 +52,20 @@ describe('validate', () => {
     expect(core.setFailed).not.toHaveBeenCalled();
   });
 
+  it('should validate a correct revert commit message', () => {
+    const commitMessage: CommitMessage = {
+      header: 'Revert "chore: build latest release file"',
+      body: [],
+      footer: null,
+      hasBody: false,
+      hasFooter: false,
+    };
+
+    validate(commitMessage);
+
+    expect(core.setFailed).not.toHaveBeenCalled();
+  });
+
   it('should fail for invalid header', () => {
     const commitMessage: CommitMessage = {
       header: 'invalid header',
