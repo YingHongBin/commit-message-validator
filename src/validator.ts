@@ -1,4 +1,11 @@
 import {parseMessage, CommitMessage} from './commitMessage';
+import {
+  VALID_TYPES,
+  HEADER_PATTERN,
+  SCOPE_PATTERN,
+  MERGE_PATTERN,
+  FOOTER_PATTERN,
+} from './constants';
 import * as core from '@actions/core';
 
 /**
@@ -8,17 +15,7 @@ import * as core from '@actions/core';
  */
 function validateType(type: string): void {
   core.debug(`${type}`);
-  const types = [
-    'feat',
-    'fix',
-    'docs',
-    'style',
-    'refactor',
-    'perf',
-    'test',
-    'chore',
-  ];
-  if (!types.includes(type)) {
+  if (!VALID_TYPES.includes(type)) {
     core.setFailed(`Invalid type: ${type}`);
   }
 }
@@ -34,8 +31,7 @@ function validateScope(scope: string | undefined): void {
     return;
   }
   // TODO: define scopes in the config
-  const scopePattern = /^[A-Za-z0-9]+$|^\*$/;
-  if (!scopePattern.test(scope)) {
+  if (!SCOPE_PATTERN.test(scope)) {
     core.setFailed(`Invalid scope: ${scope}`);
   }
 }
@@ -76,12 +72,10 @@ function validateSubject(subject: string): void {
  * @param header given header to validate
  */
 function validateHeader(header: string): void {
-  const headerPattern = /^(.+?)(?:\((.+)\))?: (.+)$/;
-  const mergePattern = /^Merge pull request #[0-9]+ from .+$/;
-  if (mergePattern.test(header)) {
+  if (MERGE_PATTERN.test(header)) {
     return;
   }
-  const match = header.match(headerPattern);
+  const match = header.match(HEADER_PATTERN);
   if (!match) {
     core.setFailed(`Invalid header: ${header}`);
     return;
@@ -125,9 +119,8 @@ function validateBody(body: string[]): void {
  * @param footer given footer to validate
  */
 function validateFooter(footer: string): void {
-  const footerPattern = /^((close|fix) #[0-9]+)(, (close|fix) #[0-9]+)*$/;
   footer.split('/').forEach(line => {
-    if (!footerPattern.test(line)) {
+    if (!FOOTER_PATTERN.test(line)) {
       core.setFailed(`Invalid footer: ${line}`);
     }
   });
