@@ -1,7 +1,7 @@
 import validate from '../src/validator';
 import {CommitMessage} from '../src/commitMessage';
 import * as core from '@actions/core';
-import exp from 'constants';
+import { getConfig } from '../src/config';
 
 jest.mock('@actions/core');
 
@@ -9,6 +9,8 @@ describe('validate', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
+
+  const config = getConfig();
 
   it('should validate a correct commit message', () => {
     const commitMessage: CommitMessage = {
@@ -19,7 +21,7 @@ describe('validate', () => {
       hasFooter: true,
     };
 
-    validate(commitMessage);
+    validate(commitMessage, config);
 
     expect(core.setFailed).not.toHaveBeenCalled();
   });
@@ -33,7 +35,7 @@ describe('validate', () => {
       hasFooter: true,
     };
 
-    validate(commitMessage);
+    validate(commitMessage, config);
 
     expect(core.setFailed).not.toHaveBeenCalled();
   });
@@ -47,7 +49,7 @@ describe('validate', () => {
       hasFooter: false,
     };
 
-    validate(commitMessage);
+    validate(commitMessage, config);
 
     expect(core.setFailed).not.toHaveBeenCalled();
   });
@@ -61,7 +63,7 @@ describe('validate', () => {
       hasFooter: false,
     };
 
-    validate(commitMessage);
+    validate(commitMessage, config);
 
     expect(core.setFailed).not.toHaveBeenCalled();
   });
@@ -75,7 +77,7 @@ describe('validate', () => {
       hasFooter: true,
     };
 
-    validate(commitMessage);
+    validate(commitMessage, config);
 
     expect(core.setFailed).toHaveBeenCalledWith(
       'Invalid header: invalid header',
@@ -91,7 +93,7 @@ describe('validate', () => {
       hasFooter: true,
     };
 
-    validate(commitMessage);
+    validate(commitMessage, config);
 
     expect(core.setFailed).toHaveBeenCalledWith('Invalid type: invalid');
   });
@@ -105,7 +107,7 @@ describe('validate', () => {
       hasFooter: true,
     };
 
-    validate(commitMessage);
+    validate(commitMessage, config);
 
     expect(core.setFailed).toHaveBeenCalledWith('Invalid scope: invalid scope');
   });
@@ -120,7 +122,7 @@ describe('validate', () => {
       hasFooter: true,
     };
 
-    validate(commitMessage);
+    validate(commitMessage, config);
 
     expect(core.setFailed).toHaveBeenCalledWith(
       'Subject should not start with an uppercase letter:  Invalid subject and too long long long long long long long long long long long long long long long long long long long long.',
@@ -148,7 +150,7 @@ describe('validate', () => {
       hasFooter: true,
     };
 
-    validate(commitMessage);
+    validate(commitMessage, config);
 
     expect(core.setFailed).toHaveBeenCalledWith(
       'Body paragraph should start with an uppercase letter:  invalid body paragraph.',
@@ -170,7 +172,7 @@ describe('validate', () => {
       hasFooter: true,
     };
 
-    validate(commitMessage);
+    validate(commitMessage, config);
 
     expect(core.setFailed).toHaveBeenCalledWith(
       'Invalid footer: invalid footer',

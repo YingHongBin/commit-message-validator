@@ -1,12 +1,5 @@
-import {parseMessage, CommitMessage} from './commitMessage';
-import {
-  VALID_TYPES,
-  HEADER_PATTERN,
-  SCOPE_PATTERN,
-  MERGE_PATTERN,
-  FOOTER_PATTERN,
-  REVERT_PATTERN,
-} from './constants';
+import {CommitMessage} from './commitMessage';
+import {IConfig, IHeaderConfig} from './config';
 import * as core from '@actions/core';
 
 /**
@@ -14,9 +7,9 @@ import * as core from '@actions/core';
  *
  * @param type given type to validate
  */
-function validateType(type: string): void {
+function validateType(type: string, validTypes: string[]): void {
   core.debug(`${type}`);
-  if (!VALID_TYPES.includes(type)) {
+  if (!validTypes.includes(type)) {
     core.setFailed(`Invalid type: ${type}`);
   }
 }
@@ -27,12 +20,12 @@ function validateType(type: string): void {
  *
  * @param scope given scope to validate
  */
-function validateScope(scope: string | undefined): void {
+function validateScope(scope: string | undefined, scopePattern: RegExp): void {
   if (scope === undefined) {
     return;
   }
   // TODO: define scopes in the config
-  if (!SCOPE_PATTERN.test(scope)) {
+  if (!scopePattern.test(scope)) {
     core.setFailed(`Invalid scope: ${scope}`);
   }
 }
@@ -72,19 +65,19 @@ function validateSubject(subject: string): void {
  *
  * @param header given header to validate
  */
-function validateHeader(header: string): void {
-  if (MERGE_PATTERN.test(header) || REVERT_PATTERN.test(header)) {
+function validateHeader(header: string, config: IHeaderConfig): void {
+  if (config.mergePattern.test(header) || config.revertPattern.test(header)) {
     return;
   }
-  const match = header.match(HEADER_PATTERN);
+  const match = header.match(config.headerPattern);
   if (!match) {
     core.setFailed(`Invalid header: ${header}`);
     return;
   } else {
     const [, type, scope, subject] = match;
     core.debug(`Type: ${type}, scope: ${scope}, subject: ${subject}`);
-    validateType(type);
-    validateScope(scope);
+    validateType(type, config.validTypes);
+    validateScope(scope, config.scopePattern);
     validateSubject(subject);
   }
 }
@@ -119,9 +112,9 @@ function validateBody(body: string[]): void {
  *
  * @param footer given footer to validate
  */
-function validateFooter(footer: string): void {
+function validateFooter(footer: string, footerPattern: RegExp): void {
   footer.split('/').forEach(line => {
-    if (!FOOTER_PATTERN.test(line)) {
+    if (!footerPattern.test(line)) {
       core.setFailed(`Invalid footer: ${line}`);
     }
   });
@@ -132,12 +125,15 @@ function validateFooter(footer: string): void {
  *
  * @param commitMessage given commit message
  */
-export default function validate(commitMessage: CommitMessage): void {
-  validateHeader(commitMessage.header);
+export default function validate(
+  commitMessage: CommitMessage,
+  config: IConfig,
+): void {
+  validateHeader(commitMessage.header, config.headerConfig);
   if (commitMessage.hasBody) {
     validateBody(commitMessage.body);
   }
   if (commitMessage.hasFooter) {
-    validateFooter(commitMessage.footer);
+    validateFooter(commitMessage.footer, config.footerPattern);
   }
 }
