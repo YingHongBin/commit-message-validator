@@ -79,10 +79,10 @@ describe('parseMessage', () => {
       'Merge pull request #123 from user/branch\n\nfeat: add new feature\n\nclose #123';
     const result: CommitMessage = parseMessage(message);
     expect(result.header).toBe('Merge pull request #123 from user/branch');
-    expect(result.body).toStrictEqual([]);
-    expect(result.hasBody).toBe(false);
-    expect(result.footer).toBe(null);
-    expect(result.hasFooter).toBe(false);
+    expect(result.body).toStrictEqual(['feat: add new feature']);
+    expect(result.hasBody).toBe(true);
+    expect(result.footer).toBe('close #123');
+    expect(result.hasFooter).toBe(true);
   });
 
   test('multi line message parse with revert commit', () => {
@@ -90,8 +90,8 @@ describe('parseMessage', () => {
       'Revert "chore: build latest release file"\n\nThis reverts commit b6b3880547a06c6c575dade895c2b6dbe157f114.';
     const result: CommitMessage = parseMessage(message);
     expect(result.header).toBe('Revert "chore: build latest release file"');
-    expect(result.body).toEqual([]);
-    expect(result.hasBody).toBe(false);
+    expect(result.body).toEqual(['This reverts commit b6b3880547a06c6c575dade895c2b6dbe157f114.']);
+    expect(result.hasBody).toBe(true);
     expect(result.footer).toBe(null);
     expect(result.hasFooter).toBe(false);
   });

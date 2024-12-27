@@ -59,20 +59,22 @@ function validateSubject(subject: string): void {
 
 /**
  * validate given header follows the format <type>(<scope>): <subject>
- * and validate the type, scope and subject
+ * and validate the type, scope and subject.
+ * If the header is special commit, return true to mark skip subsequent validators
  *
  * note: scope is optional
  *
  * @param header given header to validate
+ * @returns skip subsequent validators flag
  */
-function validateHeader(header: string, config: IHeaderConfig): void {
+function validateHeader(header: string, config: IHeaderConfig): boolean {
   if (config.mergePattern.test(header) || config.revertPattern.test(header)) {
-    return;
+    // if this commit is a merge or a revert, skip other validators
+    return true;
   }
   const match = header.match(config.headerPattern);
   if (!match) {
     core.setFailed(`Invalid header: ${header}`);
-    return;
   } else {
     const [, type, scope, subject] = match;
     core.debug(`Type: ${type}, scope: ${scope}, subject: ${subject}`);
@@ -80,6 +82,7 @@ function validateHeader(header: string, config: IHeaderConfig): void {
     validateScope(scope, config.scopePattern);
     validateSubject(subject);
   }
+  return false;
 }
 
 /**
@@ -129,7 +132,13 @@ export default function validate(
   commitMessage: CommitMessage,
   config: IConfig,
 ): void {
-  validateHeader(commitMessage.header, config.headerConfig);
+  const skip: boolean = validateHeader(
+    commitMessage.header,
+    config.headerConfig,
+  );
+  if (skip) {
+    return;
+  }
   if (commitMessage.hasBody) {
     validateBody(commitMessage.body);
   }
