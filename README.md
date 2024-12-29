@@ -47,3 +47,5 @@ Footer is optional. If the last paragraph start with `close` or `fix`, it is con
 
 ### Pull Request Merge Commit
 If the commit is a merge commit from merge pull request in github, the commit message header line must be `Merge pull request #{pull_request_number} from {branch_name}`, which is default format from github.
+
+test
