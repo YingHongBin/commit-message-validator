@@ -12,8 +12,6 @@ export const VALID_TYPES: string[] = [
 // header must be in the format: <type>(<scope>): <subject>
 // (<scope>) is optional
 export const HEADER_PATTERN: RegExp = /^(.+?)(?:\((.+)\))?: (.+)$/;
-// scope can be any alphanumeric string or *
-export const SCOPE_PATTERN: RegExp = /^[A-Za-z0-9]+$|^\*$/;
 // merge commit must be in the format: Merge pull request #<number> from <branch>
 export const MERGE_PATTERN: RegExp = /^Merge pull request #[0-9]+ from .+$/;
 // footer must begin with keywords close or fix followed by a space and then #{issue_number}

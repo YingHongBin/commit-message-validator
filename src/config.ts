@@ -2,14 +2,14 @@ import {
   FOOTER_PATTERN,
   HEADER_PATTERN,
   MERGE_PATTERN,
-  SCOPE_PATTERN,
   REVERT_PATTERN,
   VALID_TYPES,
 } from './constants';
+import {ISetting} from './settings';
 
 export interface IHeaderConfig {
   headerPattern: RegExp;
-  scopePattern: RegExp;
+  scopeValues: string[];
   mergePattern: RegExp;
   revertPattern: RegExp;
   validTypes: string[];
@@ -20,10 +20,14 @@ export interface IConfig {
   footerPattern: RegExp;
 }
 
-export function getConfig(): IConfig {
+export function getConfig(setting: ISetting): IConfig {
   const headerConfig = {} as IHeaderConfig;
   headerConfig.headerPattern = HEADER_PATTERN;
-  headerConfig.scopePattern = SCOPE_PATTERN;
+  if (setting.scopeValues.length > 0) {
+    headerConfig.scopeValues = [...setting.scopeValues, '*'];
+  } else {
+    headerConfig.scopeValues = [];
+  }
   headerConfig.mergePattern = MERGE_PATTERN;
   headerConfig.revertPattern = REVERT_PATTERN;
   headerConfig.validTypes = VALID_TYPES;

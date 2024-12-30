@@ -1,7 +1,8 @@
 import validate from '../src/validator';
 import {CommitMessage} from '../src/commitMessage';
 import * as core from '@actions/core';
-import { getConfig } from '../src/config';
+import {getConfig} from '../src/config';
+import {getSetting} from '../src/settings';
 
 jest.mock('@actions/core');
 
@@ -10,9 +11,15 @@ describe('validate', () => {
     jest.clearAllMocks();
   });
 
-  const config = getConfig();
+  const config = getConfig(getSetting());
+  
+  const mockGetInput = jest.fn().mockReturnValue('scope, scope2');
+  jest
+    .spyOn(core, 'getInput')
+    .mockImplementation(mockGetInput);
+  const configWithScope = getConfig(getSetting());
 
-  it('should validate a correct commit message', () => {
+  it('should validate a correct commit message with scope', () => {
     const commitMessage: CommitMessage = {
       header: 'feat(scope): add new feature',
       body: ['This is a valid body paragraph.'],
@@ -21,12 +28,27 @@ describe('validate', () => {
       hasFooter: true,
     };
 
-    validate(commitMessage, config);
+    validate(commitMessage, configWithScope);
 
     expect(core.setFailed).not.toHaveBeenCalled();
   });
 
-  it('should validate a correct commit message without scope', () => {
+  it('should validate a correct commit message with scope wildcard', () => {
+    jest.clearAllMocks();
+    const commitMessage: CommitMessage = {
+      header: 'feat(*): add new feature',
+      body: ['This is a valid body paragraph.'],
+      footer: 'close #123',
+      hasBody: true,
+      hasFooter: true,
+    };
+
+    validate(commitMessage, configWithScope);
+
+    expect(core.setFailed).not.toHaveBeenCalled();
+  });
+
+  it('should validate a correct commit message', () => {
     const commitMessage: CommitMessage = {
       header: 'feat: add new feature',
       body: ['This is a valid body paragraph.'],
@@ -100,7 +122,7 @@ describe('validate', () => {
 
   it('should fail for invalid scope', () => {
     const commitMessage: CommitMessage = {
-      header: 'feat(invalid scope): add new feature',
+      header: 'feat(scope): add new feature',
       body: ['This is a valid body paragraph.'],
       footer: 'close #123',
       hasBody: true,
@@ -109,7 +131,35 @@ describe('validate', () => {
 
     validate(commitMessage, config);
 
-    expect(core.setFailed).toHaveBeenCalledWith('Invalid scope: invalid scope');
+    expect(core.setFailed).toHaveBeenCalledWith('Invalid scope: scope');
+  });
+
+  it('should fail for invalid scope with input', () => {
+    const commitMessage: CommitMessage = {
+      header: 'feat(scope1): add new feature',
+      body: ['This is a valid body paragraph.'],
+      footer: 'close #123',
+      hasBody: true,
+      hasFooter: true,
+    };
+
+    validate(commitMessage, configWithScope);
+
+    expect(core.setFailed).toHaveBeenCalledWith('Invalid scope: scope1');
+  });
+
+  it('should fail for invalid scope wildcard', () => {
+    const commitMessage: CommitMessage = {
+      header: 'feat(*): add new feature',
+      body: ['This is a valid body paragraph.'],
+      footer: 'close #123',
+      hasBody: true,
+      hasFooter: true,
+    };
+
+    validate(commitMessage, config);
+
+    expect(core.setFailed).toHaveBeenCalledWith('Invalid scope: *');
   });
 
   it('should fail for invalid subject', () => {
