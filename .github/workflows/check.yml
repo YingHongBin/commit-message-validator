@@ -13,3 +13,5 @@ jobs:
               uses: ./
               env:
                 ACTIONS_STEP_DEBUG: ${{ vars.ACTIONS_STEP_DEBUG}}
+              with:
+                scope-values: 'scope1,scope2'

@@ -3,7 +3,8 @@ import * as github from '@actions/github';
 import {PullRequestEvent, PushEvent, Commit} from '@octokit/webhooks-types';
 import validate from './validator';
 import {parseMessage, CommitMessage} from './commitMessage';
-import { getConfig } from './config';
+import {getConfig} from './config';
+import {getSetting, ISetting} from './settings';
 
 /**
  * fetch response from the given url and map the response to commit messages
@@ -45,8 +46,9 @@ async function getCommitMessages(eventName: string): Promise<string[]> {
 
 async function run(): Promise<void> {
   try {
+    const setting: ISetting = getSetting();
+    const config = getConfig(setting);
     const commitMessages = await getCommitMessages(github.context.eventName);
-    const config = getConfig();
     commitMessages.forEach(message => {
       const commitMessage: CommitMessage = parseMessage(message);
       core.debug(`Commit message: ${JSON.stringify(commitMessage)}`);

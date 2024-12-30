@@ -20,12 +20,11 @@ function validateType(type: string, validTypes: string[]): void {
  *
  * @param scope given scope to validate
  */
-function validateScope(scope: string | undefined, scopePattern: RegExp): void {
+function validateScope(scope: string | undefined, scopeValues: string[]): void {
   if (scope === undefined) {
     return;
   }
-  // TODO: define scopes in the config
-  if (!scopePattern.test(scope)) {
+  if (!scopeValues.includes(scope)) {
     core.setFailed(`Invalid scope: ${scope}`);
   }
 }
@@ -79,7 +78,7 @@ function validateHeader(header: string, config: IHeaderConfig): boolean {
     const [, type, scope, subject] = match;
     core.debug(`Type: ${type}, scope: ${scope}, subject: ${subject}`);
     validateType(type, config.validTypes);
-    validateScope(scope, config.scopePattern);
+    validateScope(scope, config.scopeValues);
     validateSubject(subject);
   }
   return false;
