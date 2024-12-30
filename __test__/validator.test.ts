@@ -12,11 +12,9 @@ describe('validate', () => {
   });
 
   const config = getConfig(getSetting());
-  
+
   const mockGetInput = jest.fn().mockReturnValue('scope, scope2');
-  jest
-    .spyOn(core, 'getInput')
-    .mockImplementation(mockGetInput);
+  jest.spyOn(core, 'getInput').mockImplementation(mockGetInput);
   const configWithScope = getConfig(getSetting());
 
   it('should validate a correct commit message with scope', () => {

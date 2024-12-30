@@ -22,7 +22,6 @@ class CommitMessage {
 
 function parseMessage(message: string): CommitMessage {
   const sections: string[] = message.split('\n\n');
-  console.log(sections[0]);
   const footerCandidate = sections[sections.length - 1];
   if (FOOTER_PATTERN.test(footerCandidate) && sections.length > 1) {
     return new CommitMessage(
