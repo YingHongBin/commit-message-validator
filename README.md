@@ -1,6 +1,30 @@
 # commit-message-validator
 Action to validate commits follow the guidelines
 
+## Usage
+In your workflow you first need to checkout you repository and then run the action. The action will fail if the commit messages do not follow the guidelines.
+
+Refer to the following example:
+```yaml
+name: check commit message
+on: [push, pull_request]
+jobs:
+    check:
+        runs-on: ubuntu-latest
+        steps:
+            -name: Checkout
+             uses: actions/checkout@v4
+
+            -name: Check commit message
+             uses: YingHongBin/commit-message-validator@version
+             with: 
+                scope-values: 'scope1, scope2'
+```
+
+### scope-values
+
+Customized scope values, default undifined, means any scope would be denied. If you want to use customized scope values, you can set the values in the `scope-values` input. The values should be separated by comma. Wildcard is acceptable if scope-values has been set.
+
 ## Commit Message Guidelines
 
 Commit Message format as follows
